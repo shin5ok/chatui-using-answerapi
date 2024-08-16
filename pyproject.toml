@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "chatbot-using-answerapi"
+version = "0.1.0"
+description = ""
+authors = ["shin5ok <shin5ok@55mp.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+chainlit = "^1.1.402"
+google-cloud-discoveryengine = "^0.12.1"
+google-api-core = "^2.19.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
