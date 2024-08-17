@@ -1,5 +1,6 @@
 import os
-from google.cloud import discoveryengine_v1alpha as discoveryengine
+from pprint import pprint as pp
+from google.cloud import discoveryengine_v1 as discoveryengine
 from google.api_core.client_options import ClientOptions
 
 import config as c
@@ -21,7 +22,8 @@ search_client = discoveryengine.ConversationalSearchServiceClient(
 
 
 def answer_query(
-    query_text: str, session_id: str = "-"
+    query_text: str,
+    session_id: str = "-"
 ) -> discoveryengine.types.conversational_search_service.AnswerQueryResponse:
     # Init Query object
     query = discoveryengine.Query()
@@ -30,7 +32,7 @@ def answer_query(
     request = discoveryengine.AnswerQueryRequest(
         serving_config=f"projects/{PROJECT_ID}/locations/global/collections/default_collection/dataStores/{DATASTORE_ID}/servingConfigs/default_serving_config",
         query=query,
-        # （Option）クエリフェーズ
+        asynchronous_mode=False,
         query_understanding_spec=discoveryengine.AnswerQueryRequest.QueryUnderstandingSpec(
             # クエリ言い換え
             query_rephraser_spec=discoveryengine.AnswerQueryRequest.QueryUnderstandingSpec.QueryRephraserSpec(
@@ -41,7 +43,8 @@ def answer_query(
         # （Option）検索フェーズ
         search_spec=discoveryengine.AnswerQueryRequest.SearchSpec(
             search_params=discoveryengine.AnswerQueryRequest.SearchSpec.SearchParams(
-                max_return_results=3
+                max_return_results=5, # default 10
+                # search_result_mode = discoveryengine.AnswerQueryRequest.types.SearchRequest.ContentSearchSpec.SearchResultMode(),
             )
         ),
         # （Option）回答フェーズ
@@ -64,6 +67,7 @@ def answer_query(
         # （Option）フォローアップ検索利用時のセッション
         session=f"projects/{PROJECT_ID}/locations/global/collections/default_collection/dataStores/{DATASTORE_ID}/sessions/{session_id}",
     )
+    # pp(request)
 
     # Answer API 実行
     response = search_client.answer_query(request=request)
