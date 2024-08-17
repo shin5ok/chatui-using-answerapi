@@ -18,12 +18,12 @@ LOCATION = c.LOCATION
 default_model = "Gemini-1.5-Flash"
 
 @cl.set_chat_profiles
-async def chat_profile():
+async def _set_chat_profile():
     profiles = []
     return profiles
 
 @cl.on_chat_start
-async def main():
+async def _on_chat_start():
     settings = await cl.ChatSettings(
         [
             Slider(
@@ -52,12 +52,12 @@ async def setup_runnable(settings):
     return profile
 
 @cl.on_message
-async def on_message(message: cl.Message):
+async def _on_message(message: cl.Message):
     response = a.answer_query(message.content)
     content = response.answer.answer_text
     # https://cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1alpha#answer
 
-    # pp(response.answer)
+    pp(response.answer)
 
     if len(response.answer.references) > 0:
         content += "\n"

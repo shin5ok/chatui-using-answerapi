@@ -6,7 +6,7 @@ import config as c
 
 VERTEX_AI_LOCATION = c.VERTEX_AI_LOCATION
 PROJECT_ID = c.PROJECT_ID
-DATA_STORE_ID = c.DATA_STORE_ID
+DATASTORE_ID = c.DATASTORE_ID
 
 MODEL_VERSION = c.MODEL_VERSION
 
@@ -28,7 +28,7 @@ def answer_query(
     query.text = query_text
 
     request = discoveryengine.AnswerQueryRequest(
-        serving_config=f"projects/{PROJECT_ID}/locations/global/collections/default_collection/dataStores/{DATA_STORE_ID}/servingConfigs/default_serving_config",
+        serving_config=f"projects/{PROJECT_ID}/locations/global/collections/default_collection/dataStores/{DATASTORE_ID}/servingConfigs/default_serving_config",
         query=query,
         # （Option）クエリフェーズ
         query_understanding_spec=discoveryengine.AnswerQueryRequest.QueryUnderstandingSpec(
@@ -62,7 +62,7 @@ def answer_query(
             ignore_non_answer_seeking_query=True,
         ),
         # （Option）フォローアップ検索利用時のセッション
-        session=f"projects/{PROJECT_ID}/locations/global/collections/default_collection/dataStores/{DATA_STORE_ID}/sessions/{session_id}",
+        session=f"projects/{PROJECT_ID}/locations/global/collections/default_collection/dataStores/{DATASTORE_ID}/sessions/{session_id}",
     )
 
     # Answer API 実行
