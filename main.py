@@ -1,5 +1,6 @@
 import io
 import os
+import uuid
 from pprint import pprint as pp
 
 from base64 import b64encode
@@ -24,6 +25,7 @@ async def _set_chat_profile():
 
 @cl.on_chat_start
 async def _on_chat_start():
+
     settings = await cl.ChatSettings(
         [
             Slider(
@@ -53,22 +55,29 @@ async def setup_runnable(settings):
 
 @cl.on_message
 async def _on_message(message: cl.Message):
-    response = a.answer_query(message.content)
+
+    session = cl.user_session.get("session")
+    if session is None:
+        pp("session is none")
+        session = "-"
+
+    response = a.answer_query(message.content, session)
+    cl.user_session.set("session", response.session.name.split("/")[-1])
+    pp(dict(session=session))
+
     content = response.answer.answer_text
     # https://cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1alpha#answer
 
-    pp(response.answer)
-
     if len(response.answer.references) > 0:
         content += "\n"
-        content += "参照:\n"
+        content += "参考ドキュメント:\n"
         key = {}
         for r in response.answer.references:
             add_content = f"{r.chunk_info.document_metadata.title} {r.chunk_info.document_metadata.page_identifier}ページ\n"
             # avoid to dup
             if not add_content in key:
                 content += add_content
-            key[add_content] = 1
+                key[add_content] = 1
 
     res = cl.Message(content=content)
 
