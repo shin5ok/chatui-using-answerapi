@@ -1,10 +1,5 @@
-import io
-import os
-import uuid
 from pprint import pprint as pp
 
-from base64 import b64encode
-from operator import itemgetter
 import chainlit as cl
 from chainlit.input_widget import Select, Slider
 
