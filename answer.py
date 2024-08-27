@@ -21,7 +21,7 @@ search_client = discoveryengine.ConversationalSearchServiceClient(
 )
 
 
-def answer_query(
+def query(
     query_text: str,
     session_id: str = "-"
 ) -> discoveryengine.types.conversational_search_service.AnswerQueryResponse:

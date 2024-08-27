@@ -56,7 +56,7 @@ async def _on_message(message: cl.Message):
         pp("session is none")
         session = "-"
 
-    response = a.answer_query(message.content, session)
+    response = a.query(message.content, session)
     cl.user_session.set("session", response.session.name.split("/")[-1])
     pp(dict(session=session))
 
