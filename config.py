@@ -7,4 +7,6 @@ DATASTORE_ID = os.environ.get("DATASTORE_ID")
 BUCKET_NAME = os.environ.get("BUCKET_NAME", PROJECT_ID)
 LOCATION = os.environ.get("LOCATION", "europe-west1")
 
+REF_PAGES = "REF_PAGES" in os.environ
+
 MODEL_VERSION = "gemini-1.5-flash-001/answer_gen/v1"

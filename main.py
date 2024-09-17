@@ -5,6 +5,7 @@ from chainlit.input_widget import Select, Slider
 
 import config as c
 import answer as a
+import utils as u
 
 PROJECT_ID = c.PROJECT_ID
 BUCKET_NAME = c.BUCKET_NAME
@@ -41,7 +42,9 @@ async def _on_chat_start():
             ),
         ]
     ).send()
-    await setup_runnable(settings)
+
+    content = "Google Cloud のセキュリティについてなんでもきいてください"
+    await cl.Message(content=content).send()
 
 @cl.on_settings_update
 async def setup_runnable(settings):
@@ -62,18 +65,47 @@ async def _on_message(message: cl.Message):
 
     content = response.answer.answer_text
     # https://cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1alpha#answer
+    pp(response)
 
-    if len(response.answer.references) > 0:
+    # 引用の詳細を出す場合
+    if c.REF_PAGES and len(response.answer.references) > 0:
         content += "\n"
         content += "参考ドキュメント:\n"
         key = {}
         for r in response.answer.references:
+            # pp(r)
             add_content = f"{r.chunk_info.document_metadata.title} {r.chunk_info.document_metadata.page_identifier}ページ\n"
             # avoid to dup
             if not add_content in key:
                 content += add_content
                 key[add_content] = 1
 
-    res = cl.Message(content=content)
+    # 引用ドキュメントの名前だけ出す
+    if len(response.answer.steps) > 0:
+        elements = []
+        pp(elements)
+        for x in response.answer.steps:
+            n = 0
+            for v in x.actions:
+                key = {}
+                for s in v.observation.search_results:
+                    if not s.uri in key:
+                        key[s.uri] = 1
+
+                        n += 1
+                        url = u.get_authenticated_url(s.uri)
+                        elements.append(
+                            cl.Text(
+                                name=f"引用 {n}",
+                                content=s.title,
+                                url=url,
+                            )
+                        )
+            pp(elements)
+
+    res = cl.Message(
+        content=content,
+        elements=elements,
+    )
 
     await res.send()

@@ -25,7 +25,6 @@ def query(
     query_text: str,
     session_id: str = "-"
 ) -> discoveryengine.types.conversational_search_service.AnswerQueryResponse:
-    # Init Query object
     query = discoveryengine.Query()
     query.text = query_text
 
@@ -34,42 +33,30 @@ def query(
         query=query,
         asynchronous_mode=False,
         query_understanding_spec=discoveryengine.AnswerQueryRequest.QueryUnderstandingSpec(
-            # クエリ言い換え
             query_rephraser_spec=discoveryengine.AnswerQueryRequest.QueryUnderstandingSpec.QueryRephraserSpec(
-                disable=False,  # True に設定するとクエリ言い換えを無効化
-                max_rephrase_steps=5,  # 言い換えステップ数を設定（1〜5の範囲）
+                disable=False,
+                max_rephrase_steps=5,
             ),
         ),
-        # （Option）検索フェーズ
         search_spec=discoveryengine.AnswerQueryRequest.SearchSpec(
             search_params=discoveryengine.AnswerQueryRequest.SearchSpec.SearchParams(
-                max_return_results=5, # default 10
-                # search_result_mode = discoveryengine.AnswerQueryRequest.types.SearchRequest.ContentSearchSpec.SearchResultMode(),
+                max_return_results=5,
             )
         ),
-        # （Option）回答フェーズ
         answer_generation_spec=discoveryengine.AnswerQueryRequest.AnswerGenerationSpec(
-            # モデル指定
             model_spec=discoveryengine.AnswerQueryRequest.AnswerGenerationSpec.ModelSpec(
                 model_version=MODEL_VERSION,
             ),
-            # プリアンブル設定
             prompt_spec=discoveryengine.AnswerQueryRequest.AnswerGenerationSpec.PromptSpec(
                 preamble="箇条書きで回答してください。"
             ),
-            # 引用を含めるかどうか
             include_citations=True,
-            # 関連性の低いクエリを除外するかどうか
             ignore_low_relevant_content=True,
-            # 分類されたクエリを無視するかどうか
             ignore_non_answer_seeking_query=True,
         ),
-        # （Option）フォローアップ検索利用時のセッション
         session=f"projects/{PROJECT_ID}/locations/global/collections/default_collection/dataStores/{DATASTORE_ID}/sessions/{session_id}",
     )
-    # pp(request)
 
-    # Answer API 実行
     response = search_client.answer_query(request=request)
 
     return response
