@@ -1,11 +1,11 @@
-# ChatUI using Answer API of Vertex AI Search a.k.a. Vertex AI Agent Builder
+#   ChatUI using Answer API of Vertex AI Search a.k.a. Vertex AI Agent Builder
 
 ## Prerequisite
 - Python 3.10+
 - Google Cloud project, billing enabled
 - Google Cloud SDK(gcloud command)
 - Some PDFs for search sources
-- [Option]: Original FQDN for this service.
+- [Option]: Original FQDN for this service if using https
 
 ## Preparation
 on your local environment
@@ -13,13 +13,6 @@ Run as below, to get authorization.
 ```
 gcloud auth application-default login
 gcloud auth login
-```
-
-Set environment values.
-```
-export PROJECT_ID=<your project id>
-export BQ_DATASET_ID=<your BigQuery dataset>
-export BQ_TABLE_NAME=<your BigQuery table>
 ```
 
 ## Setup
@@ -50,6 +43,7 @@ make iam
 ### 4. Deploy Cloud Run Service
 
 Prepare environment values.
+Database ID is one you wrote down before.
 ```bash
 export PROJECT_ID=<your Project ID>
 export DATASTORE_ID=<your Datastore ID>
@@ -68,7 +62,7 @@ Wait for few minutes until finishing the deployment.
 ### 5. Configure Identity Aware Proxy(IAP) 
 To prevent unauthorized access from the Internet, you can take advantage of IAP.
 
-Follow the link.
+Follow the link.  
 [https://cloud.google.com/iap/docs/enabling-cloud-run?hl=ja](https://cloud.google.com/iap/docs/enabling-cloud-run?hl=ja)
 
 >[!NOTE]
