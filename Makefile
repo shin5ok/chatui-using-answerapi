@@ -12,7 +12,7 @@ deploy:
 	--cpu=1 \
 	--memory=512M \
 	--ingress=internal-and-cloud-load-balancing \
-	--set-env-vars=DATASTORE_ID=$(DATASTORE_ID),PROJECT_ID=$(PROJECT_ID) \
+	--set-env-vars=SUBJECT=$(SUBJECT),DATASTORE_ID=$(DATASTORE_ID),PROJECT_ID=$(PROJECT_ID) \
 	--min-instances=1 \
 	--service-account=chatapp-answer-api@$(PROJECT_ID).iam.gserviceaccount.com \
 	--allow-unauthenticated
