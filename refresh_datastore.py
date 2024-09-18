@@ -29,11 +29,11 @@ PROJECT_ID = c.PROJECT_ID
 DATASTORE_ID = c.DATASTORE_ID
 
 @click.command()
-@click.argument("gcs_uri")
-def refresh_datastore(gcs_uri: str):
+@click.argument("gcs_uris", nargs=-1)
+def refresh_datastore(gcs_uris: list[str]):
 
 
-    print("gcs_uri:", gcs_uri)
+    print("gcs_uris:", gcs_uris)
 
     client_options = (
         ClientOptions(api_endpoint=f"{LOCATION}-discoveryengine.googleapis.com")
@@ -57,7 +57,7 @@ def refresh_datastore(gcs_uri: str):
         parent=parent,
         gcs_source=discoveryengine.GcsSource(
             # Multiple URIs are supported
-            input_uris=[gcs_uri],
+            input_uris=gcs_uris,
             # Options:
             # - `content` - Unstructured documents (PDF, HTML, DOC, TXT, PPTX)
             # - `custom` - Unstructured documents with JSONL metadata
