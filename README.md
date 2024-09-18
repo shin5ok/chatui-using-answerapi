@@ -85,12 +85,12 @@ Wait for few minutes until finishing the deployment.
 To prevent unauthorized access from the Internet, you can take advantage of IAP.
 
 Follow the link.  
-[https://cloud.google.com/iap/docs/enabling-cloud-run?hl=ja](https://cloud.google.com/iap/docs/enabling-cloud-run?hl=ja)
+[https://cloud.google.com/iap/docs/enabling-cloud-run?hl=ja](https://cloud.google.com/iap/docs/enabling-cloud-run?hl=ja)  
 You can use a SSL certificate provided from Managed certification or Certificate manager.
 
 >[!NOTE]
 > You need to disable CDN with the Load Balancer when adopting IAP.
 
 ### 6. Test
-Open IP address or your FQDN assigned to the Load Balancer with your browser.  
+Open the FQDN of certificate assigned to the Load Balancer with your browser.  
 Just try it.
