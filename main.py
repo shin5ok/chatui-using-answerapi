@@ -90,6 +90,7 @@ async def _on_message(message: cl.Message):
                     if not s.uri in key:
                         key[s.uri] = 1
 
+                        # This feature requires service account private key
                         # url = u.get_authenticated_url(s.uri)
                         references += f"{s.title}\n"
 
@@ -97,14 +98,14 @@ async def _on_message(message: cl.Message):
         elements.append(
             cl.Text(
                 name="引用",
-                content="".join(references),
+                content=references,
             )
         )
-        pp(elements)
 
     res = cl.Message(
         content=content,
         elements=elements,
     )
+    pp(elements)
 
     await res.send()
