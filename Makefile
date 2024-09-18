@@ -1,5 +1,4 @@
 
-BUCKET_NAME?=$(PROJECT_ID)
 
 
 .PHONY: deploy

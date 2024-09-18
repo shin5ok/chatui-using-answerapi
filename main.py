@@ -8,7 +8,6 @@ import answer as a
 import utils as u
 
 PROJECT_ID = c.PROJECT_ID
-BUCKET_NAME = c.BUCKET_NAME
 
 # 設定
 default_model = "Gemini-1.5-Flash"
