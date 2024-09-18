@@ -70,6 +70,11 @@ Database ID is one you wrote down before.
 export PROJECT_ID=<your Project ID>
 export DATASTORE_ID=<your Datastore ID>
 ```
+And then, set start up comment according to your app.
+For example,
+```bash
+export SUBJECT="Ask me about Google Cloud security"
+```
 
 Deploy the Cloud Run service.
 ```bash
