@@ -77,7 +77,7 @@ export SUBJECT="Ask me about Google Cloud security"
 ```
 
 Deploy the Cloud Run service.
-Set option to show references.
+Specify the option as below if you want to confirm citations.
 ```bash
 export REF_PAGES=1
 ```
