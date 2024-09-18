@@ -66,27 +66,36 @@ async def _on_message(message: cl.Message):
     # https://cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1alpha#answer
     pp(response)
 
+
+    elements = []
     # 引用の詳細を出す場合
     if c.REF_PAGES and len(response.answer.references) > 0:
-        content += "\n"
-        content += "参考ドキュメント:\n"
+        detail_references = ""
         key = {}
         for r in response.answer.references:
-            # pp(r)
+            pp(r)
             add_content = f"{r.chunk_info.document_metadata.title} {r.chunk_info.document_metadata.page_identifier}ページ\n"
             # avoid to dup
             if not add_content in key:
-                content += add_content
+                detail_references += add_content
                 key[add_content] = 1
 
+        elements.append(
+            cl.Text(
+                name="Citations",
+                content=detail_references,
+            )
+        )
+
     # 引用ドキュメントの名前だけ出す
-    if len(response.answer.steps) > 0:
-        elements = []
+    if c.REF_ONLY and len(response.answer.steps) > 0:
         references = ""
         for x in response.answer.steps:
             for v in x.actions:
                 key = {}
                 for s in v.observation.search_results:
+                    if s.snippet_info[0].snippet_status == "NO_SNIPPET_AVAILABLE":
+                        continue
                     if not s.uri in key:
                         key[s.uri] = 1
 
@@ -97,7 +106,7 @@ async def _on_message(message: cl.Message):
 
         elements.append(
             cl.Text(
-                name="引用",
+                name="References",
                 content=references,
             )
         )
