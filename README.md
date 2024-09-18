@@ -77,6 +77,11 @@ export SUBJECT="Ask me about Google Cloud security"
 ```
 
 Deploy the Cloud Run service.
+Set option to show references.
+```bash
+export REF_PAGES=1
+```
+Deploy it.
 ```bash
 make deploy
 ```
