@@ -24,7 +24,7 @@ from google.cloud import discoveryengine
 
 import config as c
 
-LOCATION = c.LOCATION
+VERTEX_AI_LOCATION = c.VERTEX_AI_LOCATION
 PROJECT_ID = c.PROJECT_ID
 DATASTORE_ID = c.DATASTORE_ID
 
@@ -33,11 +33,10 @@ DATASTORE_ID = c.DATASTORE_ID
 def refresh_datastore(gcs_uris: list[str]):
 
 
-    print("gcs_uris:", gcs_uris)
-
+    print("gcs_uris:", list(gcs_uris))
     client_options = (
-        ClientOptions(api_endpoint=f"{LOCATION}-discoveryengine.googleapis.com")
-        if LOCATION != "global"
+        ClientOptions(api_endpoint=f"{VERTEX_AI_LOCATION}-discoveryengine.googleapis.com")
+        if VERTEX_AI_LOCATION != "global"
         else None
     )
 
@@ -48,7 +47,7 @@ def refresh_datastore(gcs_uris: list[str]):
     # e.g. projects/{project}/LOCATIONs/{LOCATION}/dataStores/{data_store_id}/branches/{branch}
     parent = client.branch_path(
         project=PROJECT_ID,
-        location=LOCATION,
+        location=VERTEX_AI_LOCATION,
         data_store=DATASTORE_ID,
         branch="default_branch",
     )
@@ -57,7 +56,7 @@ def refresh_datastore(gcs_uris: list[str]):
         parent=parent,
         gcs_source=discoveryengine.GcsSource(
             # Multiple URIs are supported
-            input_uris=gcs_uris,
+            input_uris=list(gcs_uris),
             # Options:
             # - `content` - Unstructured documents (PDF, HTML, DOC, TXT, PPTX)
             # - `custom` - Unstructured documents with JSONL metadata
@@ -81,6 +80,7 @@ def refresh_datastore(gcs_uris: list[str]):
     # Handle the response
     print(response)
     print(metadata)
+
 
 if __name__ == "__main__":
     refresh_datastore()
