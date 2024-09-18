@@ -43,7 +43,7 @@ async def _on_chat_start():
         ]
     ).send()
 
-    content = "Google Cloud のセキュリティについてなんでもきいてください"
+    content = c.SUBJECT
     await cl.Message(content=content).send()
 
 @cl.on_settings_update

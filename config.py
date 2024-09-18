@@ -9,4 +9,6 @@ LOCATION = os.environ.get("LOCATION", "europe-west1")
 
 REF_PAGES = "REF_PAGES" in os.environ
 
+SUBJECT = os.environ.get("SUBJECT")
+
 MODEL_VERSION = "gemini-1.5-flash-001/answer_gen/v1"
