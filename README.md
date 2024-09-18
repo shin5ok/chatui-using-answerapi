@@ -36,9 +36,9 @@ It will take few minutes.
 
 ## Setup
 
-### 1. Setup your Datastore for Agent Builder
+### 1. Setup your Data store for Agent Builder
 
-You can build a Datastore very simply.  
+You can build a Data store very simply.  
 Follow the link.  
 [https://cloud.google.com/generative-ai-app-builder/docs/try-enterprise-search](https://cloud.google.com/generative-ai-app-builder/docs/try-enterprise-search)
 
@@ -48,7 +48,7 @@ Follow the link.
 
 ### 2. Get the datastore ID
 
-Write down the Datastore ID.
+Write down the Data store ID.
 ![](./images/id_of_datastore.png)
 The ID is "kaijuu-storage_1723815035090" in this case.
 
@@ -68,7 +68,7 @@ Prepare environment values.
 Database ID is one you wrote down before.
 ```bash
 export PROJECT_ID=<your Project ID>
-export DATASTORE_ID=<your Datastore ID>
+export DATASTORE_ID=<your Data store ID>
 ```
 And then, set start up comment according to your app.
 For example,
@@ -99,3 +99,14 @@ You can use a SSL certificate provided from Managed certification or Certificate
 ### 6. Test
 Open the FQDN of certificate assigned to the Load Balancer with your browser.  
 Just try it.
+
+
+## Option: Refresh data in Data store
+When you want to refresh data to search, remember your Data store path, like gs://<Cloud Storage bucket>/data
+For example,
+```bash
+export PROJECT_ID=<your Project ID>
+export DATASTORE_ID=<your Data store ID>
+
+poetry run python refresh_datastore.py gs://foo/data/*.pdf gs://bar/reports/*.pdf
+```
