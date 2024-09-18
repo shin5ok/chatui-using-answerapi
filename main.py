@@ -82,29 +82,30 @@ async def _on_message(message: cl.Message):
     # 引用ドキュメントの名前だけ出す
     if len(response.answer.steps) > 0:
         elements = []
-        pp(elements)
+        references = ""
         for x in response.answer.steps:
-            n = 0
             for v in x.actions:
                 key = {}
                 for s in v.observation.search_results:
                     if not s.uri in key:
                         key[s.uri] = 1
 
-                        n += 1
-                        url = u.get_authenticated_url(s.uri)
-                        elements.append(
-                            cl.Text(
-                                name=f"引用 {n}",
-                                content=s.title,
-                                url=url,
-                            )
-                        )
-            pp(elements)
+                        # This feature requires service account private key
+                        # url = u.get_authenticated_url(s.uri)
+                        references += f"{s.title}\n"
+
+
+        elements.append(
+            cl.Text(
+                name="引用",
+                content=references,
+            )
+        )
 
     res = cl.Message(
         content=content,
         elements=elements,
     )
+    pp(elements)
 
     await res.send()
