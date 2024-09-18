@@ -1,26 +1,45 @@
 #   ChatUI using Answer API of Vertex AI Search a.k.a. Vertex AI Agent Builder
+## Architecture
+![Sample architecture](/images/sample-architecture.png)
 
 ## Prerequisite
-- Python 3.10+
 - Google Cloud project, billing enabled
 - Google Cloud SDK(gcloud command)
 - Some PDFs for search sources
-- [Option]: Original FQDN for this service if using https
+- Custom domain that you have authorization
+- [Option]: Python 3.10+ if testing on localhost
 
 ## Preparation
-on your local environment
-Run as below, to get authorization.
+### 1. Clone this repo
+On your local environment,
+clone this repo and change directory.
+```bash
+git clone https://github.com/shin5ok/chatui-using-answerapi; cd chatui-using-answerapi/
 ```
-gcloud auth application-default login
+
+### 2. Sign in your Google Cloud Project
+Run as below, to get authorization.
+```bash
 gcloud auth login
 ```
+
+If you want to test on localhost,
+```bash
+gcloud auth application-default login
+```
+
+### 3. Enable required services
+```bash
+gcloud services enable compute.googleapis.com run.googleapis.com cloudbuild.googleapis.com
+```
+It will take few minutes.
 
 ## Setup
 
 ### 1. Setup your Datastore for Agent Builder
 
-You can build a Datastore very simply.
-follow the link.  
+You can build a Datastore very simply.  
+Follow the link.  
 [https://cloud.google.com/generative-ai-app-builder/docs/try-enterprise-search](https://cloud.google.com/generative-ai-app-builder/docs/try-enterprise-search)
 
 > [!NOTE]
@@ -39,6 +58,9 @@ Make sure where you are in top directory, and then just type this.
 ```bash
 make iam
 ```
+>[!NOTE]
+>In this case we just use Cloud Build default service account because just for test.  
+>We recommend you prepare a custom service account for Cloud Build for production or staging to project your environment.
 
 ### 4. Deploy Cloud Run Service
 
@@ -64,7 +86,11 @@ To prevent unauthorized access from the Internet, you can take advantage of IAP.
 
 Follow the link.  
 [https://cloud.google.com/iap/docs/enabling-cloud-run?hl=ja](https://cloud.google.com/iap/docs/enabling-cloud-run?hl=ja)
+You can use a SSL certificate provided from Managed certification or Certificate manager.
 
 >[!NOTE]
-> If you want https access, you need domain name that you have authorization of.  
-> Take advantage of Managed certification or Certificate manager.
+> You need to disable CDN with the Load Balancer when adopting IAP.
+
+### 6. Test
+Open IP address or your FQDN assigned to the Load Balancer with your browser.  
+Just try it.
