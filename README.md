@@ -43,7 +43,7 @@ Follow the link.
 [https://cloud.google.com/generative-ai-app-builder/docs/try-enterprise-search](https://cloud.google.com/generative-ai-app-builder/docs/try-enterprise-search)
 
 > [!NOTE]
-> Recommend to use Cloud Storage as data source because I have not confirmed other data sources.
+> Recommend to use Cloud Storage as data source because I have not made sure if it works on other data sources.
 
 
 ### 2. Get the datastore ID
