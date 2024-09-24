@@ -43,7 +43,7 @@ Follow the link.
 [https://cloud.google.com/generative-ai-app-builder/docs/try-enterprise-search](https://cloud.google.com/generative-ai-app-builder/docs/try-enterprise-search)
 
 > [!NOTE]
-> Recommend to use Cloud Storage as data source because I have not confirmed other data sources.
+> Recommend to use Cloud Storage as data source because I have not made sure if it works on other data sources.
 
 
 ### 2. Get the datastore ID
@@ -75,8 +75,6 @@ For example,
 ```bash
 export SUBJECT="Ask me about Google Cloud security"
 ```
-
-Deploy the Cloud Run service.
 Specify the option as below if you want to confirm citations.
 ```bash
 export REF_PAGES=1
