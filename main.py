@@ -41,7 +41,8 @@ async def _on_chat_start():
         ]
     ).send()
 
-    content = c.SUBJECT
+
+    content = c.SUBJECT or "Ask me anything!"
     await cl.Message(content=content).send()
 
 @cl.on_settings_update
@@ -69,6 +70,7 @@ async def _on_message(message: cl.Message):
     elements = []
     # 引用の詳細を出す場合
     if c.REF_PAGES and len(response.answer.references) > 0:
+        print("REF_PAGES")
         detail_references = ""
         key = {}
         for r in response.answer.references:

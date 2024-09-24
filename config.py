@@ -9,4 +9,4 @@ DATASTORE_ID = os.environ.get("DATASTORE_ID")
 REF_PAGES = os.environ.get("REF_PAGES")
 REF_ONLY = os.environ.get("REF_ONLY")
 
-SUBJECT = os.environ.get("SUBJECT", "Ask me anything")
+SUBJECT = os.environ.get("SUBJECT")
