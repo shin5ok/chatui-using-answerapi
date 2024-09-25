@@ -77,7 +77,7 @@ export SUBJECT="Ask me about Google Cloud security"
 ```
 Specify the option as below if you want to confirm citations.
 ```bash
-export REF_PAGES=1
+export REF_ONLY=1
 ```
 Deploy it.
 ```bash

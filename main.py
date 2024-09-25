@@ -104,18 +104,17 @@ async def _on_message(message: cl.Message):
                         # url = u.get_authenticated_url(s.uri)
                         references += f"{s.title}\n"
 
-
-        elements.append(
-            cl.Text(
-                name="References",
-                content=references,
+        if references:
+            elements.append(
+                cl.Text(
+                    name="References",
+                    content=references,
+                )
             )
-        )
 
     res = cl.Message(
         content=content,
         elements=elements,
     )
-    pp(elements)
 
     await res.send()
