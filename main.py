@@ -58,63 +58,67 @@ async def _on_message(message: cl.Message):
         pp("session is none")
         session = "-"
 
-    response = a.query(message.content, session)
-    cl.user_session.set("session", response.session.name.split("/")[-1])
-    pp(dict(session=session))
+    try:
+        response = a.query(message.content, session)
+        cl.user_session.set("session", response.session.name.split("/")[-1])
+        pp(dict(session=session))
 
-    content = response.answer.answer_text
-    # https://cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1alpha#answer
-    pp(response)
+        content = response.answer.answer_text
+        # https://cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1alpha#answer
+        pp(response)
 
 
-    elements = []
-    # 引用の詳細を出す場合
-    if c.REF_PAGES and len(response.answer.references) > 0:
-        print("REF_PAGES")
-        detail_references = ""
-        key = {}
-        for r in response.answer.references:
-            pp(r)
-            add_content = f"{r.chunk_info.document_metadata.title} {r.chunk_info.document_metadata.page_identifier}ページ\n"
-            # avoid to dup
-            if not add_content in key:
-                detail_references += add_content
-                key[add_content] = 1
+        elements = []
+        # 引用の詳細を出す場合
+        if c.REF_PAGES and len(response.answer.references) > 0:
+            print("REF_PAGES")
+            detail_references = ""
+            key = {}
+            for r in response.answer.references:
+                pp(r)
+                add_content = f"{r.chunk_info.document_metadata.title} {r.chunk_info.document_metadata.page_identifier}ページ\n"
+                # avoid to dup
+                if not add_content in key:
+                    detail_references += add_content
+                    key[add_content] = 1
 
-        elements.append(
-            cl.Text(
-                name="Citations",
-                content=detail_references,
-            )
-        )
-
-    # 引用ドキュメントの名前だけ出す
-    if c.REF_ONLY and len(response.answer.steps) > 0:
-        references = ""
-        for x in response.answer.steps:
-            for v in x.actions:
-                key = {}
-                for s in v.observation.search_results:
-                    if s.snippet_info[0].snippet_status == "NO_SNIPPET_AVAILABLE":
-                        continue
-                    if not s.uri in key:
-                        key[s.uri] = 1
-
-                        # This feature requires service account private key
-                        # url = u.get_authenticated_url(s.uri)
-                        references += f"{s.title}\n"
-
-        if references:
             elements.append(
                 cl.Text(
-                    name="References",
-                    content=references,
+                    name="Citations",
+                    content=detail_references,
                 )
             )
 
-    res = cl.Message(
-        content=content,
-        elements=elements,
-    )
+        # 引用ドキュメントの名前だけ出す
+        if c.REF_ONLY and len(response.answer.steps) > 0:
+            references = ""
+            for x in response.answer.steps:
+                for v in x.actions:
+                    key = {}
+                    for s in v.observation.search_results:
+                        if s.snippet_info[0].snippet_status == "NO_SNIPPET_AVAILABLE":
+                            continue
+                        if not s.uri in key:
+                            key[s.uri] = 1
 
-    await res.send()
+                            # This feature requires service account private key
+                            # url = u.get_authenticated_url(s.uri)
+                            references += f"{s.title}\n"
+
+            if references:
+                elements.append(
+                    cl.Text(
+                        name="References",
+                        content=references,
+                    )
+                )
+    except Exception as e:
+        content = f"例外エラーが発生しました: {e}"
+    finally:
+
+        res = cl.Message(
+            content=content,
+            elements=elements,
+        )
+
+        await res.send()
