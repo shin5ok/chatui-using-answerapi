@@ -10,7 +10,7 @@ import utils as u
 
 PROJECT_ID = c.PROJECT_ID
 
-# 設定
+
 default_model = "Gemini-1.5-Flash"
 
 @cl.set_chat_profiles
@@ -42,12 +42,12 @@ async def _on_chat_start():
         ]
     ).send()
 
-
     content = c.SUBJECT or "Ask me anything!"
     await cl.Message(content=content).send()
 
 @cl.on_settings_update
 async def setup_runnable(settings):
+
     profile = cl.user_session.get("chat_profile")
     return profile
 
@@ -68,51 +68,6 @@ async def _on_message(message: cl.Message):
         content = response.answer.answer_text
         # https://cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1alpha#answer
 
-        # 引用の詳細を出す場合
-        if c.REF_PAGES and len(response.answer.references) > 0:
-            print("REF_PAGES")
-            detail_references = ""
-            key = {}
-            for r in response.answer.references:
-                # pp(r)
-                add_content = f"{r.chunk_info.document_metadata.title} {r.chunk_info.document_metadata.page_identifier}ページ\n"
-                # avoid to dup
-                if not add_content in key:
-                    detail_references += add_content
-                    key[add_content] = 1
-
-            elements.append(
-                cl.Text(
-                    name="Citations",
-                    content=detail_references,
-                )
-            )
-
-        # 引用ドキュメントの名前だけ出す
-        if c.REF_ONLY and len(response.answer.steps) > 0:
-            references = ""
-            for x in response.answer.steps:
-                for v in x.actions:
-                    key = {}
-                    for s in v.observation.search_results:
-                        pp(s)
-                        if len(s.snippet_info) > 0 and s.snippet_info[0].snippet_status == "NO_SNIPPET_AVAILABLE":
-                            continue
-                        if not s.title in key:
-                            key[s.title] = 1
-
-                            # This feature requires service account private key
-                            # url = u.get_authenticated_url(s.uri)
-                            references += f"{s.title}\n"
-        
-            if references:
-                elements.append(
-                    cl.Text(
-                        name="References",
-                        content=references,
-                    )
-                )
-
         _, citations = a.render_response(response)
         elements.append(
             cl.Text(
@@ -120,7 +75,6 @@ async def _on_message(message: cl.Message):
                 content=citations,
             )
         )
-
 
     except Exception as e:
         _, _, exception_traceback = sys.exc_info()
