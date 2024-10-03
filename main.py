@@ -104,7 +104,7 @@ async def _on_message(message: cl.Message):
                             # This feature requires service account private key
                             # url = u.get_authenticated_url(s.uri)
                             references += f"{s.title}\n"
-
+        
             if references:
                 elements.append(
                     cl.Text(
@@ -112,6 +112,16 @@ async def _on_message(message: cl.Message):
                         content=references,
                     )
                 )
+
+        _, citations = a.render_response(response)
+        elements.append(
+            cl.Text(
+                name="References",
+                content=citations,
+            )
+        )
+
+
     except Exception as e:
         _, _, exception_traceback = sys.exc_info()
         filename = exception_traceback.tb_frame.f_code.co_filename

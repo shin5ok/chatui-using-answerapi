@@ -20,6 +20,7 @@ search_client = discoveryengine.ConversationalSearchServiceClient(
     client_options=client_options
 )
 
+PREAMBLE = c.PREAMBLE
 
 def query(
     query_text: str,
@@ -48,13 +49,7 @@ def query(
                 model_version=MODEL_VERSION,
             ),
             prompt_spec=discoveryengine.AnswerQueryRequest.AnswerGenerationSpec.PromptSpec(
-                preamble="""
-                    Given the conversation between a user and a helpful assistant and some search results, create a final answer for the assistant.
-                    The answer should use all relevant information from the search results, not introduce any additional information, and use exactly the same words as the search results when possible.
-                    The assistant's answer should be no more than 20 sentences.
-                    The assistant's answer should be formatted as a bulleted list.
-                    Each list item should start with the "-" symbol.
-                """
+                preamble=PREAMBLE,
             ),
             include_citations=True,
             ignore_low_relevant_content=True,
@@ -66,3 +61,35 @@ def query(
     response = search_client.answer_query(request=request)
 
     return response
+
+def render_response(response):
+    answer = response.answer.answer_text
+    answer_with_citations = ""
+    all_ids = []
+    end_index_pre = 0
+    for item in response.answer.citations:
+        start_index = item.start_index
+        end_index = item.end_index + 1
+        # sources = item.sources
+        ids = []
+        for source in item.sources:
+            ids.append(int(source.reference_id)+1)
+            all_ids.append(int(source.reference_id)+1)
+        answer_with_citations += "".join([
+            answer[end_index_pre:start_index],
+            answer[start_index:end_index],
+            str(ids),
+        ])
+        end_index_pre = end_index
+    answer_with_citations += answer[end_index_pre:]
+
+    citations = ""
+    for c, item in enumerate(response.answer.references):
+        if c+1 in all_ids:
+            chunk = item.chunk_info.content
+            title = item.chunk_info.document_metadata.title
+            citations += f'[{c+1}] {title}'
+            citations += f' # {chunk[:50]}...'
+            citations += "\n"
+
+    return answer_with_citations, citations
