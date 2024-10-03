@@ -42,6 +42,7 @@ def query(
         search_spec=discoveryengine.AnswerQueryRequest.SearchSpec(
             search_params=discoveryengine.AnswerQueryRequest.SearchSpec.SearchParams(
                 max_return_results=3,
+                max_return_results=3,
             )
         ),
         answer_generation_spec=discoveryengine.AnswerQueryRequest.AnswerGenerationSpec(
