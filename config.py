@@ -2,7 +2,6 @@ import os
   
 VERTEX_AI_LOCATION = "global"
 MODEL_VERSION = "gemini-1.5-flash-002/answer_gen/v1"
-MODEL_VERSION = "gemini-1.5-flash-002/answer_gen/v1"
 
 PROJECT_ID = os.environ.get("PROJECT_ID")
 DATASTORE_ID = os.environ.get("DATASTORE_ID")

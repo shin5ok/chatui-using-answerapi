@@ -1,6 +1,5 @@
 from pprint import pprint as pp
 import sys
-import sys
 
 import chainlit as cl
 from chainlit.input_widget import Select, Slider
@@ -11,8 +10,6 @@ import utils as u
 
 PROJECT_ID = c.PROJECT_ID
 
-
-default_model = "Gemini-1.5-Flash"
 
 @cl.set_chat_profiles
 async def _set_chat_profile():
@@ -61,7 +58,6 @@ async def _on_message(message: cl.Message):
         session = "-"
 
     elements = []
-    elements = []
     try:
         response = a.query(message.content, session)
         cl.user_session.set("session", response.session.name.split("/")[-1])
@@ -79,10 +75,6 @@ async def _on_message(message: cl.Message):
         )
 
     except Exception as e:
-        _, _, exception_traceback = sys.exc_info()
-        filename = exception_traceback.tb_frame.f_code.co_filename
-        line_no = exception_traceback.tb_lineno
-        content = (f"例外エラーが発生しました: {filename}:{line_no}:{e}")
         _, _, exception_traceback = sys.exc_info()
         filename = exception_traceback.tb_frame.f_code.co_filename
         line_no = exception_traceback.tb_lineno
