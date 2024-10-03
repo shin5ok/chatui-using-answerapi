@@ -1,4 +1,5 @@
 from pprint import pprint as pp
+import sys
 
 import chainlit as cl
 from chainlit.input_widget import Select, Slider
@@ -58,6 +59,7 @@ async def _on_message(message: cl.Message):
         pp("session is none")
         session = "-"
 
+    elements = []
     try:
         response = a.query(message.content, session)
         cl.user_session.set("session", response.session.name.split("/")[-1])
@@ -65,17 +67,14 @@ async def _on_message(message: cl.Message):
 
         content = response.answer.answer_text
         # https://cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1alpha#answer
-        pp(response)
 
-
-        elements = []
         # 引用の詳細を出す場合
         if c.REF_PAGES and len(response.answer.references) > 0:
             print("REF_PAGES")
             detail_references = ""
             key = {}
             for r in response.answer.references:
-                pp(r)
+                # pp(r)
                 add_content = f"{r.chunk_info.document_metadata.title} {r.chunk_info.document_metadata.page_identifier}ページ\n"
                 # avoid to dup
                 if not add_content in key:
@@ -96,10 +95,11 @@ async def _on_message(message: cl.Message):
                 for v in x.actions:
                     key = {}
                     for s in v.observation.search_results:
-                        if s.snippet_info[0].snippet_status == "NO_SNIPPET_AVAILABLE":
+                        pp(s)
+                        if len(s.snippet_info) > 0 and s.snippet_info[0].snippet_status == "NO_SNIPPET_AVAILABLE":
                             continue
-                        if not s.uri in key:
-                            key[s.uri] = 1
+                        if not s.title in key:
+                            key[s.title] = 1
 
                             # This feature requires service account private key
                             # url = u.get_authenticated_url(s.uri)
@@ -113,7 +113,10 @@ async def _on_message(message: cl.Message):
                     )
                 )
     except Exception as e:
-        content = f"例外エラーが発生しました: {e}"
+        _, _, exception_traceback = sys.exc_info()
+        filename = exception_traceback.tb_frame.f_code.co_filename
+        line_no = exception_traceback.tb_lineno
+        content = (f"例外エラーが発生しました: {filename}:{line_no}:{e}")
     finally:
 
         res = cl.Message(
