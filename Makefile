@@ -1,4 +1,5 @@
 
+NAME := chatui-using-answerapi
 
 
 .PHONY: deploy
@@ -54,3 +55,11 @@ iam: sa
 	gcloud projects add-iam-policy-binding $(PROJECT_ID) \
 	--member=serviceAccount:$(CLOUDBUILD_SA) \
 	--role=roles/storage.admin
+
+.PHONY: run
+run:
+	docker run -it -p 8000:8080 -e PROJECT_ID=$(PROJECT_ID) -e DATASTORE_ID=$(DATASTORE_ID) $(NAME)
+
+.PHONY: local-build
+local-build:
+	docker build -t $(NAME) .

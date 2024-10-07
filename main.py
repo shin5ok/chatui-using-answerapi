@@ -71,6 +71,12 @@ async def _on_message(message: cl.Message):
             cl.Text(
                 name="References",
                 content=citations,
+            ),
+        )
+        elements.append(
+            cl.Text(
+                name="References",
+                content="test",
             )
         )
 

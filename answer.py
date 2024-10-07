@@ -22,6 +22,9 @@ search_client = discoveryengine.ConversationalSearchServiceClient(
 
 PREAMBLE = c.PREAMBLE
 
+doc_cache: dict = {}
+
+
 def query(
     query_text: str,
     session_id: str = "-"
@@ -35,8 +38,8 @@ def query(
         asynchronous_mode=False,
         query_understanding_spec=discoveryengine.AnswerQueryRequest.QueryUnderstandingSpec(
             query_rephraser_spec=discoveryengine.AnswerQueryRequest.QueryUnderstandingSpec.QueryRephraserSpec(
-                disable=False,
-                max_rephrase_steps=5,
+                max_rephrase_steps=2,
+                disable=True,
             ),
         ),
         search_spec=discoveryengine.AnswerQueryRequest.SearchSpec(
@@ -88,8 +91,25 @@ def render_response(response):
         if c+1 in all_ids:
             chunk = item.chunk_info.content
             title = item.chunk_info.document_metadata.title
-            citations += f'[{c+1}] {title}'
-            citations += f' # {chunk[:50]}...'
+            # citation = {
+            #     "title": f"[{c+1}] {title}",
+            #     "preview": f" # {chunk[:50]}...",
+            # }
+            # citations.append(citation)
+            citations += f"[{c+1}] {title}"
+            citations += f" # {chunk[:50]}..."
             citations += "\n"
 
     return answer_with_citations, citations
+
+def get_doc_uri(doc_id: str) -> str:
+    if doc_id in doc_cache:
+        return doc_cache[doc_id]
+
+    client = discoveryengine.DocumentServiceClient()
+    request = discoveryengine.GetDocumentRequest(
+        name=doc_id,
+    )
+    response = client.get_document(request=request)
+    return response.content.uri
+

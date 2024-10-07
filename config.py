@@ -11,6 +11,8 @@ REF_ONLY = os.environ.get("REF_ONLY")
 
 SUBJECT = os.environ.get("SUBJECT")
 
+RETRIEVAL_FILE_URL = os.environ.get("RETRIEVAL_FILE_URL")
+
 PREAMBLE = """
 Given the conversation between a user and a helpful assistant and some search results, create a final answer for the assistant.
 The answer should use all relevant information from the search results, not introduce any additional information, and use exactly the same words as the search results when possible.
