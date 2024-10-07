@@ -58,7 +58,7 @@ iam: sa
 
 .PHONY: run
 run:
-	docker run -it -p 8000:8080 -e PROJECT_ID=$(PROJECT_ID) -e DATASTORE_ID=$(DATASTORE_ID) $(NAME)
+	docker run -it -v $(HOME):/root -p 8000:8080 -e PROJECT_ID=$(PROJECT_ID) -e DATASTORE_ID=$(DATASTORE_ID) $(NAME)
 
 .PHONY: local-build
 local-build:

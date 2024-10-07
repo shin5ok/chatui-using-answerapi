@@ -67,17 +67,18 @@ async def _on_message(message: cl.Message):
         # https://cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1alpha#answer
 
         _, citations = a.render_response(response)
+        citation_text = ""
+        if len(citations) > 0:
+            for n, c in enumerate(citations):
+                citation_text += f"[[{n+1}] {c['title']}]({c['url']})\n"
+                citation_text += f"{c['preview']}..."
+                citation_text += "\n\n"
+
         elements.append(
             cl.Text(
                 name="References",
-                content=citations,
+                content=citation_text,
             ),
-        )
-        elements.append(
-            cl.Text(
-                name="References",
-                content="test",
-            )
         )
 
     except Exception as e:
@@ -85,6 +86,7 @@ async def _on_message(message: cl.Message):
         filename = exception_traceback.tb_frame.f_code.co_filename
         line_no = exception_traceback.tb_lineno
         content = (f"例外エラーが発生しました: {filename}:{line_no}:{e}")
+
     finally:
 
         res = cl.Message(

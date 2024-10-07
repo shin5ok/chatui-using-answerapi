@@ -1,4 +1,5 @@
 import os
+import re
 from pprint import pprint as pp
 from google.cloud import discoveryengine_v1 as discoveryengine
 from google.api_core.client_options import ClientOptions
@@ -38,8 +39,8 @@ def query(
         asynchronous_mode=False,
         query_understanding_spec=discoveryengine.AnswerQueryRequest.QueryUnderstandingSpec(
             query_rephraser_spec=discoveryengine.AnswerQueryRequest.QueryUnderstandingSpec.QueryRephraserSpec(
-                max_rephrase_steps=2,
-                disable=True,
+                max_rephrase_steps=3,
+                disable=False,
             ),
         ),
         search_spec=discoveryengine.AnswerQueryRequest.SearchSpec(
@@ -86,24 +87,24 @@ def render_response(response):
         end_index_pre = end_index
     answer_with_citations += answer[end_index_pre:]
 
-    citations = ""
+    citations = []
     for c, item in enumerate(response.answer.references):
+        pp(item)
         if c+1 in all_ids:
             chunk = item.chunk_info.content
             title = item.chunk_info.document_metadata.title
-            # citation = {
-            #     "title": f"[{c+1}] {title}",
-            #     "preview": f" # {chunk[:50]}...",
-            # }
-            # citations.append(citation)
-            citations += f"[{c+1}] {title}"
-            citations += f" # {chunk[:50]}..."
-            citations += "\n"
+            citation = {
+                "title": f"{title}",
+                "preview": f"{chunk[:50]}",
+                "url": get_doc_uri(item.chunk_info.document_metadata.document)
+            }
+            citations.append(citation)
 
     return answer_with_citations, citations
 
 def get_doc_uri(doc_id: str) -> str:
     if doc_id in doc_cache:
+        print("take doc id from cache")
         return doc_cache[doc_id]
 
     client = discoveryengine.DocumentServiceClient()
@@ -111,5 +112,15 @@ def get_doc_uri(doc_id: str) -> str:
         name=doc_id,
     )
     response = client.get_document(request=request)
-    return response.content.uri
+    uri = gcs_path_to_url(response.content.uri)
+    doc_cache[doc_id] = uri
+    return uri
 
+def gcs_path_to_url(gcs_path: str) -> str:
+    match = re.match(r"^gs://(.*)$", gcs_path)
+    if match:
+        bucket_and_blob = match.group(1)
+        return f"https://storage.cloud.google.com/{bucket_and_blob}"
+    else:
+        print(f"{gcs_path} can NOT be converted")
+        return ""
