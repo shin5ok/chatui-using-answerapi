@@ -74,12 +74,13 @@ async def _on_message(message: cl.Message):
                 citation_text += f"{c['preview']}..."
                 citation_text += "\n\n"
 
-        elements.append(
-            cl.Text(
-                name="References",
-                content=citation_text,
-            ),
-        )
+            elements.append(
+                cl.Text(
+                    name="References",
+                    content=citation_text,
+                ),
+            )
+
 
     except Exception as e:
         _, _, exception_traceback = sys.exc_info()

@@ -1,5 +1,7 @@
 import os
 import re
+from urllib.parse import quote
+
 from pprint import pprint as pp
 from google.cloud import discoveryengine_v1 as discoveryengine
 from google.api_core.client_options import ClientOptions
@@ -69,36 +71,38 @@ def query(
 def render_response(response):
     answer = response.answer.answer_text
     answer_with_citations = ""
+    citations = []
     all_ids = []
     end_index_pre = 0
-    for item in response.answer.citations:
-        start_index = item.start_index
-        end_index = item.end_index + 1
-        # sources = item.sources
-        ids = []
-        for source in item.sources:
-            ids.append(int(source.reference_id)+1)
-            all_ids.append(int(source.reference_id)+1)
-        answer_with_citations += "".join([
-            answer[end_index_pre:start_index],
-            answer[start_index:end_index],
-            str(ids),
-        ])
-        end_index_pre = end_index
-    answer_with_citations += answer[end_index_pre:]
+    try:
+        for item in response.answer.citations:
+            start_index = item.start_index
+            end_index = item.end_index + 1
+            # sources = item.sources
+            ids = []
+            for source in item.sources:
+                ids.append(int(source.reference_id)+1)
+                all_ids.append(int(source.reference_id)+1)
+            answer_with_citations += "".join([
+                answer[end_index_pre:start_index],
+                answer[start_index:end_index],
+                str(ids),
+            ])
+            end_index_pre = end_index
+        answer_with_citations += answer[end_index_pre:]
 
-    citations = []
-    for c, item in enumerate(response.answer.references):
-        pp(item)
-        if c+1 in all_ids:
-            chunk = item.chunk_info.content
-            title = item.chunk_info.document_metadata.title
-            citation = {
-                "title": f"{title}",
-                "preview": f"{chunk[:50]}",
-                "url": get_doc_uri(item.chunk_info.document_metadata.document)
-            }
-            citations.append(citation)
+        for c, item in enumerate(response.answer.references):
+            if c+1 in all_ids:
+                chunk = item.chunk_info.content
+                title = item.chunk_info.document_metadata.title
+                citation = {
+                    "title": f"{title}",
+                    "preview": f"{chunk[:50]}",
+                    "url": get_doc_uri(item.chunk_info.document_metadata.document)
+                }
+                citations.append(citation)
+    except Exception as e:
+        print(e)
 
     return answer_with_citations, citations
 
@@ -120,7 +124,8 @@ def gcs_path_to_url(gcs_path: str) -> str:
     match = re.match(r"^gs://(.*)$", gcs_path)
     if match:
         bucket_and_blob = match.group(1)
-        return f"https://storage.cloud.google.com/{bucket_and_blob}"
+        encoded_bucket_and_blob = quote(bucket_and_blob)
+        return f"https://storage.cloud.google.com/{encoded_bucket_and_blob}"
     else:
         print(f"{gcs_path} can NOT be converted")
         return ""
