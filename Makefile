@@ -6,7 +6,7 @@ NAME := chatui-using-answerapi
 deploy:
 	@echo "Building Cloud Run service of chatapp-answer-api"
 
-	gcloud run deploy chatapp-answer-api \
+	gcloud beta run deploy chatapp-answer-api \
 	--source=. \
 	--region=asia-northeast1 \
 	--cpu=1 \
@@ -14,6 +14,7 @@ deploy:
 	--ingress=internal-and-cloud-load-balancing \
 	--set-env-vars=SUBJECT="$(SUBJECT)",REF_PAGES=$(REF_PAGES),REF_ONLY=$(REF_ONLY),DATASTORE_ID=$(DATASTORE_ID),PROJECT_ID=$(PROJECT_ID) \
 	--min-instances=1 \
+	--no-default-url \
 	--service-account=chatapp-answer-api@$(PROJECT_ID).iam.gserviceaccount.com \
 	--allow-unauthenticated
 
