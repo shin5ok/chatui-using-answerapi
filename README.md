@@ -101,7 +101,7 @@ Just try it.
 
 
 ## Option: Refresh data in Data store
-When you want to refresh data to search, remember your Data store path, like gs://<Cloud Storage bucket>/data
+When you want to refresh data to search, remember your Data store path, like gs://[Cloud Storage bucket]/data  
 For example,
 ```bash
 export PROJECT_ID=<your Project ID>
