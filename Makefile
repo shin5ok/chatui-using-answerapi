@@ -10,12 +10,14 @@ deploy:
 	--source=. \
 	--region=asia-northeast1 \
 	--cpu=1 \
-	--memory=512M \
+	--memory=1G \
 	--ingress=internal-and-cloud-load-balancing \
 	--set-env-vars=SUBJECT="$(SUBJECT)",REF_PAGES=$(REF_PAGES),REF_ONLY=$(REF_ONLY),DATASTORE_ID=$(DATASTORE_ID),PROJECT_ID=$(PROJECT_ID) \
 	--min-instances=1 \
 	--no-default-url \
 	--service-account=chatapp-answer-api@$(PROJECT_ID).iam.gserviceaccount.com \
+	--session-affinity \
+	--cpu-boost \
 	--allow-unauthenticated
 
 .PHONY: sa
