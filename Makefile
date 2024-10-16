@@ -4,9 +4,9 @@ NAME := chatui-using-answerapi
 
 .PHONY: deploy
 deploy:
-	@echo "Building Cloud Run service of chatapp-answer-api"
+	@echo "Building Cloud Run service of $(NAME)"
 
-	gcloud beta run deploy chatapp-answer-api \
+	gcloud beta run deploy $(NAME) \
 	--source=. \
 	--region=asia-northeast1 \
 	--cpu=1 \
@@ -15,7 +15,7 @@ deploy:
 	--set-env-vars=SUBJECT="$(SUBJECT)",REF_PAGES=$(REF_PAGES),REF_ONLY=$(REF_ONLY),DATASTORE_ID=$(DATASTORE_ID),PROJECT_ID=$(PROJECT_ID) \
 	--min-instances=1 \
 	--no-default-url \
-	--service-account=chatapp-answer-api@$(PROJECT_ID).iam.gserviceaccount.com \
+	--service-account=$(NAME)@$(PROJECT_ID).iam.gserviceaccount.com \
 	--session-affinity \
 	--cpu-boost \
 	--allow-unauthenticated
@@ -24,7 +24,7 @@ deploy:
 sa:
 	@echo "Make service accounts"
 
-	gcloud iam service-accounts create chatapp-answer-api
+	gcloud iam service-accounts create $(NAME)
 	gcloud iam service-accounts create cloudbuild
 
 
@@ -34,11 +34,11 @@ iam: sa
 	@echo "Grant some authorizations to the service account for Cloud Run service"
 
 	gcloud projects add-iam-policy-binding $(PROJECT_ID) \
-	--member=serviceAccount:chatapp-answer-api@$(PROJECT_ID).iam.gserviceaccount.com \
+	--member=serviceAccount:$(NAME)@$(PROJECT_ID).iam.gserviceaccount.com \
 	--role=roles/discoveryengine.editor
 
 	gcloud projects add-iam-policy-binding $(PROJECT_ID) \
-	--member=serviceAccount:chatapp-answer-api@$(PROJECT_ID).iam.gserviceaccount.com \
+	--member=serviceAccount:$(NAME)@$(PROJECT_ID).iam.gserviceaccount.com \
 	--role=roles/storage.objectUser
 
 	@echo "Grant some authorizations to the service account for Cloud Build"
