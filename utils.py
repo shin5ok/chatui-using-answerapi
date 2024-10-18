@@ -26,7 +26,6 @@ def get_authenticated_url(gcs_path, expiration=60):
         print(e)
         return ""
 
-
 if __name__ == "__main__":
     import sys
     gcs_path = sys.argv[1]

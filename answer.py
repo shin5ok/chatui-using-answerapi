@@ -121,11 +121,16 @@ def get_doc_uri(doc_id: str) -> str:
     return uri
 
 def gcs_path_to_url(gcs_path: str) -> str:
-    match = re.match(r"^gs://(.*)$", gcs_path)
+    match = re.match(r"^gs://([^/]+)/(.*)$", gcs_path)
     if match:
-        bucket_and_blob = match.group(1)
-        encoded_bucket_and_blob = quote(bucket_and_blob)
-        return f"https://storage.cloud.google.com/{encoded_bucket_and_blob}"
+        if c.RETRIEVAL_FILE_URL:
+            blob = match.group(2)
+            encoded_blob = quote(blob)
+            return f"{c.RETRIEVAL_FILE_URL}/{encoded_blob}"
+        else:
+            bucket_and_blob = f"match.group(1)/match.group(2)"
+            encoded_bucket_and_blob = quote(bucket_and_blob)
+            return f"https://storage.cloud.google.com/{encoded_bucket_and_blob}"
     else:
         print(f"{gcs_path} can NOT be converted")
         return ""

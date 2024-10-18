@@ -8,6 +8,7 @@
 - Some PDFs for search sources
 - Custom domain that you have authorization
 - [Option]: Python 3.10+ if testing on localhost
+- [Option]: [Google Cloud Storage object serving](https://github.com/shin5ok/gcs-object-serving)
 
 ## Preparation
 ### 1. Clone this repo
@@ -75,6 +76,13 @@ For example,
 ```bash
 export SUBJECT="Ask me about Google Cloud security"
 ```
+### Option:
+If you want to concern about the security of signed url when serving objects like PDF,docs, you can use [gcs-object-serving](https://github.com/shin5ok/gcs-object-serving).
+```bash
+export RETRIEVAL_FILE_URL=https://<your gcs-object-serving on Load Balancer url>
+```
+With the option these objects will be protected by IAP.
+
 Deploy it.
 ```bash
 make deploy
