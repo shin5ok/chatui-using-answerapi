@@ -6,6 +6,7 @@ from chainlit.input_widget import Select, Slider
 
 import config as c
 import answer as a
+import search as s
 import utils as u
 
 PROJECT_ID = c.PROJECT_ID
@@ -80,6 +81,26 @@ async def _on_message(message: cl.Message):
                     content=citation_text,
                 ),
             )
+
+        if citation_text == "":
+
+            search_result = s.query(message.content)
+
+            search_result_text = ""
+            if len(search_result) > 0:
+                for n, c in enumerate(search_result):
+                    search_result_text += f"[[{n+1}] {c['title']}]({c['url']})\n"
+                    search_result_text += "```"
+                    search_result_text += f"{(c['extractive_answers'])}..."
+                    search_result_text += "```"
+                    search_result_text += "\n\n"
+
+                elements.append(
+                    cl.Text(
+                        name="Search Result",
+                        content=search_result_text,
+                    ),
+                )
 
 
     except Exception as e:
