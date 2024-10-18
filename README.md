@@ -6,7 +6,7 @@
 - Google Cloud project, billing enabled
 - Google Cloud SDK(gcloud command)
 - Some PDFs for search sources
-- Custom domain that you have authorization
+- Custom domain that you have authorization of
 - [Option]: Python 3.10+ if testing on localhost
 - [Option]: [Google Cloud Storage object serving](https://github.com/shin5ok/gcs-object-serving)
 
