@@ -66,3 +66,14 @@ run:
 .PHONY: local-build
 local-build:
 	docker build -t $(NAME) .
+
+.PHONY: lb-with-terraform
+lb-with-terraform:
+	@echo "cd terraform/"
+	@echo "terraform init"
+	@echo "rm -f terraform.*"
+	@echo
+	@echo "export TF_VAR_domain_name=<domain name>"
+	@echo "export TF_VAR_project=<project id>"
+	@echo "terraform plan -var cloud_run_service_name=$(NAME)"
+	@echo "terraform apply -var cloud_run_service_name=$(NAME)"
