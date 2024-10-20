@@ -46,7 +46,9 @@ def query(search_query):
             data = {}
             for k,v in (result.document.derived_struct_data.items()):
                 if k == "extractive_answers":
-                    data["extractive_answers"] = v[0].get("content")
+                    content = v[0].get("content")
+                    data["extractive_answers"] = content[0:c.SEARCH_CONTENT_LIMIT]
+                    print(data["extractive_answers"], "\n#############\n")
                     continue
                 if k == "link":
                     data["url"] = u.gcs_path_to_url(v)

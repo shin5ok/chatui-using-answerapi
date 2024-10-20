@@ -12,7 +12,7 @@ REF_ONLY = os.environ.get("REF_ONLY")
 SUBJECT = os.environ.get("SUBJECT")
 
 SEARCH_PAGE_SIZE = os.environ.get("SEARCH_PAGE_SIZE", 5)
-
+SEARCH_CONTENT_LIMIT = int(os.environ.get("SEARCH_CONTENT_LIMIT", 100))
 RETRIEVAL_FILE_URL = os.environ.get("RETRIEVAL_FILE_URL")
 
 PREAMBLE = """
