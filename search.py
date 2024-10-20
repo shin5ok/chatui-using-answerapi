@@ -48,7 +48,6 @@ def query(search_query):
                 if k == "extractive_answers":
                     content = v[0].get("content")
                     data["extractive_answers"] = content[0:c.SEARCH_CONTENT_LIMIT]
-                    print(data["extractive_answers"], "\n#############\n")
                     continue
                 if k == "link":
                     data["url"] = u.gcs_path_to_url(v)
