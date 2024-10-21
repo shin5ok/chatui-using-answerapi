@@ -124,9 +124,11 @@ resource "google_compute_backend_service" "default" {
 }
 
 output "url_for_service" {
+  description = "The url for the service"
   value = "https://${var.domain_name}"
 }
 
 output "external_ip_attached_to_gclb" {
+  description = "Configure your FQDN in DNS zone to point to this IP address"
   value = google_compute_global_address.reserved_ip.address
 }
