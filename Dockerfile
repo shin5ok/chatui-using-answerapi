@@ -1,4 +1,4 @@
-FROM python:3.12.3-slim
+FROM python:3.12.7-slim
 
 WORKDIR /app
 
@@ -7,8 +7,7 @@ RUN pip install --no-cache-dir poetry \
   && poetry config virtualenvs.in-project true
 RUN poetry install
 
-
-# USER nobody
 ENV PYTHONUNBUFFERED=on
 
-CMD ["poetry", "run", "chainlit", "run", "main.py", "--port=8080", "--host=0.0.0.0", "--headless"]
+CMD ["poetry", "run", "uvicorn", "serve:app", "--host=0.0.0.0", "--port=8080"]
+

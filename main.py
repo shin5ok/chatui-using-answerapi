@@ -11,6 +11,14 @@ import utils as u
 
 PROJECT_ID = c.PROJECT_ID
 
+# @cl.header_auth_callback
+def header_auth_callback(headers: dict) -> list[cl.User]:
+    pp(headers.get("Content-Type"))
+    if headers.get("test-header") == "test-value":
+      return cl.User(identifier="admin", metadata={"role": "admin", "provider": "header"})
+    else:
+      return None
+
 
 @cl.set_chat_profiles
 async def _set_chat_profile():
@@ -57,17 +65,18 @@ async def _on_message(message: cl.Message):
     if session is None:
         pp("session is none")
         session = "-"
-
+    
     elements = []
     try:
-        response = a.query(message.content, session)
+        sc = a.AnswerClient()
+        response = sc.query(message.content, session)
         cl.user_session.set("session", response.session.name.split("/")[-1])
         pp(dict(session=session))
 
         content = response.answer.answer_text
         # https://cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1alpha#answer
 
-        _, citations = a.render_response(response)
+        _, citations = sc.render_response(response)
         citation_text = ""
         if len(citations) > 0:
             for n, c in enumerate(citations):
@@ -87,20 +96,24 @@ async def _on_message(message: cl.Message):
             search_result = s.query(message.content)
 
             search_result_text = ""
-            if len(search_result) > 0:
-                for n, c in enumerate(search_result):
-                    search_result_text += f"[[{n+1}] {c['title']}]({c['url']})\n"
-                    search_result_text += "```"
-                    search_result_text += f"{(c['extractive_answers'])}..."
-                    search_result_text += "```"
-                    search_result_text += "\n\n"
+            try:
+                if len(search_result) > 0:
+                    for n, c in enumerate(search_result):
+                        search_result_text += f"[[{n+1}] {c['title']}]({c['url']})\n"
+                        if "extractive_answers" in c:
+                            search_result_text += "```"
+                            search_result_text += f"{(c['extractive_answers'])}..."
+                            search_result_text += "```"
+                        search_result_text += "\n\n"
+            except Exception as e:
+                print(e)
 
-                elements.append(
-                    cl.Text(
-                        name="Search Result",
-                        content=search_result_text,
-                    ),
-                )
+            elements.append(
+                cl.Text(
+                    name="Search Result",
+                    content=search_result_text,
+                ),
+            )
 
 
     except Exception as e:
