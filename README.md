@@ -3,11 +3,11 @@
 ![Sample architecture](/images/sample-architecture.png)
 
 ## Prerequisite
-- Google Cloud project, billing enabled
-- Google Cloud SDK(gcloud command)
-- Some PDFs for search sources
+- Google Cloud project with a valid billing account
+- Google Cloud SDK(gcloud command and Python SDK)
+- Some PDFs as search sources
 - Custom domain that you have authorization of
-- [Option]: Python 3.10+ if testing on localhost
+- [Option]: Python 3.12+ if testing on localhost
 - [Option]: [Google Cloud Storage object serving](https://github.com/shin5ok/gcs-object-serving)
 
 ## Preparation
