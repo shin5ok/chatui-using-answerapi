@@ -96,20 +96,24 @@ async def _on_message(message: cl.Message):
             search_result = s.query(message.content)
 
             search_result_text = ""
-            if len(search_result) > 0:
-                for n, c in enumerate(search_result):
-                    search_result_text += f"[[{n+1}] {c['title']}]({c['url']})\n"
-                    search_result_text += "```"
-                    search_result_text += f"{(c['extractive_answers'])}..."
-                    search_result_text += "```"
-                    search_result_text += "\n\n"
+            try:
+                if len(search_result) > 0:
+                    for n, c in enumerate(search_result):
+                        search_result_text += f"[[{n+1}] {c['title']}]({c['url']})\n"
+                        if "extractive_answers" in c:
+                            search_result_text += "```"
+                            search_result_text += f"{(c['extractive_answers'])}..."
+                            search_result_text += "```"
+                        search_result_text += "\n\n"
+            except Exception as e:
+                print(e)
 
-                elements.append(
-                    cl.Text(
-                        name="Search Result",
-                        content=search_result_text,
-                    ),
-                )
+            elements.append(
+                cl.Text(
+                    name="Search Result",
+                    content=search_result_text,
+                ),
+            )
 
 
     except Exception as e:
