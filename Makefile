@@ -1,5 +1,5 @@
 
-NAME := chatui-using-answerapi
+NAME ?= chatui-using-answerapi
 
 
 .PHONY: deploy
