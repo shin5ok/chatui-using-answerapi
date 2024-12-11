@@ -53,7 +53,7 @@ gcloud services enable compute.googleapis.com run.googleapis.com cloudbuild.goog
 ### 3. Cloud Runサービス用のサービスアカウントの作成
 トップディレクトリにいることを確認し、以下を入力します。
 ```bash
-make iam
+make sa iam
 ```
 > [!NOTE]
 > この例では、テストのため、Cloud Buildのデフォルトサービスアカウントのみを使用しています。本番環境またはステージング環境では、環境を保護するために、Cloud Build用のカスタムサービスアカウントを用意することをお勧めします。

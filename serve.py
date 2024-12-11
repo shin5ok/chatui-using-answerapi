@@ -11,4 +11,4 @@ def read_main():
     return {"message": "Hello World!"}
 
 
-mount_chainlit(app=app, target="main.py", path="/chat")
+mount_chainlit(app=app, target="main.py", path="/qa")

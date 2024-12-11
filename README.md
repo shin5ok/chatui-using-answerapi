@@ -57,7 +57,7 @@ The ID is "kaijuu-storage_1723815035090" in this case.
 
 Make sure where you are in top directory, and then just type this.
 ```bash
-make iam
+make sa iam
 ```
 >[!NOTE]
 >In this case we just use Cloud Build default service account because just for test.  
