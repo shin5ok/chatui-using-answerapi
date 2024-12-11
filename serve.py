@@ -4,11 +4,4 @@ from chainlit.context import init_http_context
 
 app = FastAPI()
 
-
-@app.get("/")
-def read_main():
-    init_http_context()
-    return {"message": "Hello World!"}
-
-
-mount_chainlit(app=app, target="main.py", path="/qa")
+mount_chainlit(app=app, target="main.py", path="/")
