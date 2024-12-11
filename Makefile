@@ -1,12 +1,13 @@
 
-NAME ?= chatui-using-answerapi
+NAME := chatui-using-answerapi
+RUN_NAME ?= $(NAME)
 
 
 .PHONY: deploy
 deploy:
-	@echo "Building Cloud Run service of $(NAME)"
+	@echo "Building Cloud Run service of $(RUN_NAME)"
 
-	gcloud beta run deploy $(NAME) \
+	gcloud beta run deploy $(RUN_NAME) \
 	--source=. \
 	--region=asia-northeast1 \
 	--cpu=1 \
