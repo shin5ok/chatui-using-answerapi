@@ -72,6 +72,7 @@ class AnswerClient:
                 include_citations=True,
                 ignore_low_relevant_content=True,
                 ignore_non_answer_seeking_query=True,
+                ignore_adversarial_query=True,
             ),
             session=f"projects/{PROJECT_ID}/locations/global/collections/default_collection/dataStores/{DATASTORE_ID}/sessions/{session_id}",
         )
