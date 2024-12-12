@@ -63,8 +63,9 @@ make sa iam
 ```bash
 export PROJECT_ID=<あなたのプロジェクトID>
 export DATASTORE_ID=<あなたのデータストアID>
+export RUN_NAME=chatapp
 ```
-そして、アプリケーションに合わせて起動コメントを設定します。例えば、
+そして、アプリケーションに合わせて起動時のコメントを設定します。例えば、
 ```bash
 export SUBJECT="Google Cloudセキュリティについて質問してください"
 ```
