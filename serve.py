@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from chainlit.utils import mount_chainlit
-from chainlit.context import init_http_context
 
 app = FastAPI()
 
