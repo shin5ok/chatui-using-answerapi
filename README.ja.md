@@ -67,7 +67,7 @@ export RUN_NAME=chatapp
 ```
 そして、アプリケーションに合わせて起動時のコメントを設定します。例えば、
 ```bash
-export SUBJECT="Google Cloudセキュリティについて質問してください"
+export SUBJECT="社内規定について質問してください"
 ```
 ### オプション:
 PDFやドキュメントなどのオブジェクトを配信する際の署名付きURLのセキュリティを考慮する場合は、[gcs-object-serving](https://github.com/shin5ok/gcs-object-serving)を使用できます。
@@ -81,29 +81,3 @@ export RETRIEVAL_FILE_URL=https://<ロードバランサ上のあなたのgcs-ob
 make deploy
 ```
 デプロイが完了するまで数分待ちます。
-
-> [!NOTE]
-> セキュリティ上の理由から、このサービスはロードバランサとIAPを必要とするため、まだCloud Runサービスにアクセスできません。次の手順に進みます。
-
-### 5. Identity Aware Proxy (IAP) の設定
-インターネットからの不正アクセスを防ぐために、IAPを利用できます。
-
-以下のリンクを参照してください。  
-[https://cloud.google.com/iap/docs/enabling-cloud-run?hl=ja](https://cloud.google.com/iap/docs/enabling-cloud-run?hl=ja)  
-マネージド証明書または証明書マネージャーから提供されるSSL証明書を使用できます。
-
-> [!NOTE]
-> IAPを採用する際は、ロードバランサでCDNを無効にする必要があります。
-
-### 6. テスト
-ブラウザで、ロードバランサに割り当てられた証明書のFQDNを開きます。テストしてみてください。
-
-
-## オプション: データストアのデータ更新
-検索データを更新したい場合は、`gs://[Cloud Storageバケット]/data` のようなデータストアのパスを覚えておいてください。例えば、
-```bash
-export PROJECT_ID=<あなたのプロジェクトID>
-export DATASTORE_ID=<あなたのデータストアID>
-
-poetry run python refresh_datastore.py gs://foo/data/*.pdf gs://bar/reports/*.pdf
-```
