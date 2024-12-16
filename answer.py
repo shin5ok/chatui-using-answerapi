@@ -70,9 +70,9 @@ class AnswerClient:
                     preamble=PREAMBLE,
                 ),
                 include_citations=True,
+                ignore_adversarial_query=False,
                 ignore_low_relevant_content=False,
                 ignore_non_answer_seeking_query=False,
-                ignore_adversarial_query=True,
             ),
             session=f"projects/{PROJECT_ID}/locations/global/collections/default_collection/dataStores/{DATASTORE_ID}/sessions/{session_id}",
         )
