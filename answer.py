@@ -70,7 +70,7 @@ class AnswerClient:
                     preamble=PREAMBLE,
                 ),
                 include_citations=True,
-                ignore_adversarial_query=False,
+                ignore_adversarial_query=True,
                 ignore_low_relevant_content=False,
                 ignore_non_answer_seeking_query=False,
             ),
