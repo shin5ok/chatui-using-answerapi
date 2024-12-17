@@ -52,15 +52,7 @@ gcloud services enable compute.googleapis.com run.googleapis.com cloudbuild.goog
 ![](./images/id_of_datastore.png)
 この例では、IDは "kaijuu-storage_1723815035090" です。
 
-### 3. Cloud Runサービス用のサービスアカウントの作成
-トップディレクトリにいることを確認し、以下を入力します。
-```bash
-make sa iam
-```
-> [!NOTE]
-> この例では、テストのため、Cloud Buildのデフォルトサービスアカウントのみを使用しています。本番環境またはステージング環境では、環境を保護するために、Cloud Build用のカスタムサービスアカウントを用意することをお勧めします。
-
-### 4. Cloud Runサービスのデプロイ
+### 3. Cloud Run 等に必要な環境変数を設定
 環境変数を準備します。Database IDは先に書き留めたものを使用します。
 ```bash
 export PROJECT_ID=<あなたのプロジェクトID>
@@ -78,6 +70,16 @@ export RETRIEVAL_FILE_URL=https://<ロードバランサ上のあなたのgcs-ob
 ```
 このオプションを使用すると、これらのオブジェクトはIAPによって保護されます。
 
+### 4. Cloud Runサービス用のサービスアカウントの作成
+トップディレクトリにいることを確認し、以下を入力します。
+```bash
+make sa iam
+```
+> [!NOTE]
+> この例では、テストのため、Cloud Buildのデフォルトサービスアカウントのみを使用しています。本番環境またはステージング環境では、環境を保護するために、Cloud Build用のカスタムサービスアカウントを用意することをお勧めします。
+
+
+### 5. Cloud Runサービスをデプロイ
 デプロイします。
 ```bash
 make deploy
