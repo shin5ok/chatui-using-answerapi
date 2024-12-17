@@ -15,10 +15,12 @@
 ### 1. リポジトリのクローン作成
 ローカル環境で、このリポジトリをクローンし、ディレクトリを変更します。
 ```bash
-git clone https://github.com/shin5ok/chatui-using-answerapi; cd chatui-using-answerapi/
+git clone https://github.com/kawanos/chatui-using-answerapi; cd chatui-using-answerapi/
 ```
 
 ### 2. Google Cloudプロジェクトへのサインイン
+※ すでに完了している場合は、スキップしてください  
+
 認証を取得するには、以下を実行します。
 ```bash
 gcloud auth login
