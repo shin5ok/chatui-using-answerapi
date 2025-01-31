@@ -63,13 +63,6 @@ export RUN_NAME=chatapp
 ```bash
 export SUBJECT="社内規定について質問してください"
 ```
-### オプション:
-PDFやドキュメントなどのオブジェクトを配信する際の署名付きURLのセキュリティを考慮する場合は、[gcs-object-serving](https://github.com/shin5ok/gcs-object-serving)を使用できます。
-```bash
-export RETRIEVAL_FILE_URL=https://<ロードバランサ上のあなたのgcs-object-serving URL>
-```
-このオプションを使用すると、これらのオブジェクトはIAPによって保護されます。
-
 ### 4. Cloud Runサービス用のサービスアカウントの作成
 トップディレクトリにいることを確認し、以下を入力します。
 ```bash
